@@ -194,6 +194,14 @@
         leaderboardModal.style.display = 'none';
       }
     });
+
+document.addEventListener('click', function playMusicOnUserInteraction() {
+  music.play().catch(err => {
+    console.warn('Playback failed:', err);
+  });
+  // Remove this event listener so it only triggers once
+  document.removeEventListener('click', playMusicOnUserInteraction);
+});
   </script>
   
 </body>
