@@ -75,6 +75,15 @@
     .modal-content button:hover {
       background-color: #388e3c;
     }
+
+    #payouts-image {
+    position: fixed;  /* Keeps it fixed on the screen even when scrolling */
+    left: 50px;       /* Distance from the left edge */
+    top: 80px;        /* Distance from the top */
+    max-width: 450px; /* Adjust the size */
+    height: auto;    /* On top of other elements */
+    }
+
   </style>
 </head>
 <body>
@@ -82,6 +91,7 @@
   <button onclick="location.href='index_competitive.html'">🏆 Nu castig, nu ma distrez</button>
   <button onclick="location.href='index_casual.html'">🎮 Plm s-apesi ampulea</button>
   <button id="scoreBtn">📜Tabla jmekera cu numere</button>
+  <button id="PayoutsBtn">💵Ce payouts are gunoiul asta</button>
   <button id="infoBtn">❓❔ Ce cacat apas ca sa joc?</button>
 
   <!-- Info Modal -->
@@ -113,6 +123,22 @@
     </div>
   </div>
 
+  <!-- Payouts Modal-->
+  <div id="PayoutsThing" class="modal" style="display:none;">
+    <div class="modal-content">
+      <p>
+        <strong>💲 Payouturi nebunesti</strong><br>
+        - in momentul in care iti pica bonus, primesti:<br>
+        - betul tau * 4x<br>
+        - mini gamemode unde ai de ales intre 5 cutii<br>
+        - 2 cutii sunt goale, 3 cutii au bonusuri - small, medium, big<br>
+        - small: bet * 5, medium: bet * 30, big: bet * 70<br>
+      </p>
+      <img id="payouts-image" src="images/payouts.png" alt="Payouts" />
+      <button id="closethingybutton">Close</button>
+    </div>
+  </div>
+
   <audio id="music" src="sounds/menu_music.mp3" loop></audio>
   
   <script>
@@ -124,6 +150,9 @@
     const infoModal = document.getElementById('infoModal');
     const infoBtn = document.getElementById('infoBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
+    const PayoutsModal = document.getElementById('PayoutsBtn');
+    const thingy = document.getElementById('PayoutsThing');
+    const closethingybtn = document.getElementById('closethingybutton');
 
     infoBtn.onclick = () => {
       infoModal.style.display = 'flex'; // Show info modal
@@ -132,6 +161,16 @@
     closeModalBtn.onclick = () => {
       infoModal.style.display = 'none'; // Hide info modal
     };
+
+    PayoutsModal.onclick = () => {
+      thingy.style.display = 'flex';
+    }
+
+    closethingybtn.onclick = () => {
+      thingy.style.display = 'none'; // Hide info modal
+    };
+
+
 
     // Optional: close info modal if user clicks outside modal-content
     window.onclick = (event) => {
@@ -194,14 +233,6 @@
         leaderboardModal.style.display = 'none';
       }
     });
-
-document.addEventListener('click', function playMusicOnUserInteraction() {
-  music.play().catch(err => {
-    console.warn('Playback failed:', err);
-  });
-  // Remove this event listener so it only triggers once
-  document.removeEventListener('click', playMusicOnUserInteraction);
-});
   </script>
   
 </body>
