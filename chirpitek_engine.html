@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:,">
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+  <title>🎰 Selecteaza Modul</title>
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: url('images/menu_select.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #eee;
+      margin: 20px;
+      display: flex;
+      overflow: hidden; /* prevent scrollbars */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+    }
+
+    button {
+      padding: 15px 30px;
+      margin: 10px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #1e88e5;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    /* Modal background */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Modal content box */
+    .modal-content {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 400px;
+      text-align: center;
+      color: #eee;
+      font-size: 1.1rem;
+    }
+
+    .modal-content button {
+      margin-top: 20px;
+      background-color: #4caf50;
+    }
+
+    .modal-content button:hover {
+      background-color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bine ai venit vere! Selecteaza modul jmeker de joc.</h1>
+  <button onclick="location.href='index_competitive.html'">🏆 Nu castig, nu ma distrez</button>
+  <button onclick="location.href='index_casual.html'">🎮 Plm s-apesi ampulea</button>
+  <button id="scoreBtn">📜Tabla jmekera cu numere</button>
+  <button id="infoBtn">❓❔ Ce cacat apas ca sa joc?</button>
+
+  <!-- Info Modal -->
+  <div id="infoModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <p>
+        <strong>1. "Nu castig, nu ma distrez"</strong><br>
+        - mod de joc pentru transpirici<br>
+        - buget fixat, incepi cu 50.000 LEI<br>
+        - leaderboard activ ca sa vada fraierii ce scor ai<br><br>
+  
+        <strong>2. "Plm s-apesi ampulea"</strong><br>
+        - joc liber<br>
+        - poti alege orice buget doresti<br>
+        - fara leaderboard, fara nimic<br>
+        - apesi sa te afli in treaba<br>
+        - testezi chestii, desi nu-i mai nimic de testat
+      </p>
+      <button id="closeModalBtn">Okay frate</button>
+    </div>
+  </div>
+
+  <!-- Leaderboard Modal -->
+  <div id="leaderboardModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>✨ Nebunie aicea ia uite</h2>
+      <ol id="leaderboardList" style="text-align:left; max-height:300px; overflow-y:auto;"></ol>
+      <button id="closeLeaderboardBtn">Close</button>
+    </div>
+  </div>
+
+  <audio id="music" src="sounds/menu_music.mp3" loop></audio>
+  
+  <script>
+    const music = document.getElementById('music');
+    music.volume = 0.3;
+    music.play();
+
+    // Info modal logic
+    const infoModal = document.getElementById('infoModal');
+    const infoBtn = document.getElementById('infoBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    infoBtn.onclick = () => {
+      infoModal.style.display = 'flex'; // Show info modal
+    };
+
+    closeModalBtn.onclick = () => {
+      infoModal.style.display = 'none'; // Hide info modal
+    };
+
+    // Optional: close info modal if user clicks outside modal-content
+    window.onclick = (event) => {
+      if (event.target === infoModal) {
+        infoModal.style.display = 'none';
+      }
+    };
+  </script>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module">
+    import { db } from './firebase.js'; // your Firestore initialized app export
+    import { 
+      collection, 
+      query, 
+      orderBy, 
+      limit, 
+      getDocs 
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  
+    const leaderboardBtn = document.getElementById('scoreBtn');
+    const leaderboardModal = document.getElementById('leaderboardModal');
+    const closeLeaderboardBtn = document.getElementById('closeLeaderboardBtn');
+    const leaderboardList = document.getElementById('leaderboardList');
+  
+    leaderboardBtn.addEventListener('click', async () => {
+      leaderboardList.innerHTML = '<li>Se incarca, stai asa...</li>';
+      leaderboardModal.style.display = 'flex';
+  
+      try {
+        const scoresRef = collection(db, 'scores');
+        const scoresQuery = query(scoresRef, orderBy('score', 'desc'), limit(10));
+        const snapshot = await getDocs(scoresQuery);
+  
+        if (!snapshot.empty) {
+  leaderboardList.innerHTML = '';
+  const medals = ['🏆', '🥈', '🥉'];
+  let rank = 1;
+  snapshot.forEach(doc => {
+    const { name, score, timestamp } = doc.data();
+    const medal = rank <= 3 ? medals[rank - 1] + ' ' : '';
+    leaderboardList.innerHTML += `<li>${medal} <strong>${name}</strong>: ${score.toLocaleString()}</li>`;
+    rank++;
+  });
+} else {
+  leaderboardList.innerHTML = '<li>Inca nu s-a jucat nimeni bossule!</li>';
+}
+      } catch (err) {
+        leaderboardList.innerHTML = '<li>Pula mea eroare.</li>';
+        console.error(err);
+      }
+    });
+  
+    closeLeaderboardBtn.addEventListener('click', () => {
+      leaderboardModal.style.display = 'none';
+    });
+  
+    window.addEventListener('click', (event) => {
+      if (event.target === leaderboardModal) {
+        leaderboardModal.style.display = 'none';
+      }
+    });
+  </script>
+  
+</body>
+</html>

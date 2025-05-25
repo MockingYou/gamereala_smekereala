@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:,">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pacanele Jmekerele Cac Pe Ele</title>
+  <style>
+  body {
+    font-family: 'Orbitron', sans-serif;
+    background: url('images/background_night.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #eee;
+    margin: 20px;
+  }
+  /* Aici pulica alea alea */
+  .modal {
+  display: none; /* 🔒 Hide by default */
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.959);
+  border: 2px solid black;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content {
+  text-align: center;
+}
+    
+  h1 { 
+      text-align: center; 
+      margin-bottom: 10px; 
+    }
+    
+  .container { 
+      display: flex; 
+      gap: 20px; 
+      justify-content: center; 
+      align-items: flex-start; 
+    }
+
+    #grid-wrapper { width: 350px; user-select: none; background: #3f3f3fe5; padding: 10px; border-radius: 8px; box-sizing: border-box; }
+    #grid { display: grid; grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(3, 100px); gap: 15px; }
+    .cell { background: #000000b7; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 10px #000000; transition: box-shadow 0.3s ease-in-out; border: 2px solid transparent; }
+    .cell img { max-width: 60px; max-height: 60px; user-select: none; pointer-events: none; }
+    .win-glow { border-color: #0f0; box-shadow: 0 0 8px #0f0, 0 0 15px #0f0, 0 0 25px #0f0, 0 0 40px #0f0; animation: pulse 1.5s infinite; }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 8px #0f0, 0 0 15px #0f0, 0 0 25px #0f0, 0 0 40px #0f0; }
+      50% { box-shadow: 0 0 15px #0f0, 0 0 30px #0f0, 0 0 45px #0f0, 0 0 60px #0f0; }
+    }
+
+    @keyframes pulseGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 6px #0f0,
+      0 0 12px #0f0,
+      0 0 18px #0f0;
+  }
+  50% {
+    text-shadow:
+      0 0 12px #0f0,
+      0 0 24px #0f0,
+      0 0 36px #0f0;
+  }
+}
+
+@keyframes pulseGlowRed {
+  0%, 100% {
+    text-shadow:
+      0 0 6px #f00,
+      0 0 12px #f00,
+      0 0 18px #f00;
+  }
+  50% {
+    text-shadow:
+      0 0 12px #f00,
+      0 0 24px #f00,
+      0 0 36px #f00;
+  }
+}
+    .glow-green {
+     color: #0f0; /* bright green */
+     animation: pulseGlow 1s infinite;
+    }
+    .glow-red {
+     color: rgb(255, 0, 0); /* bright red */
+     animation: pulseGlowRed 0.5s infinite;
+    }
+
+/* MONEY CONFETTI COAIE*/
+#moneyConfettiContainer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: visible;
+}
+
+.moneyConfetti {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 40px;
+  height: auto;
+  opacity: 0;
+  transform: translateX(-50%);
+  animation: moneyBurst 3.5s ease-out forwards;
+}
+
+@keyframes moneyBurst {
+  0% {
+    transform: translateX(0) translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translateX(var(--x)) translateY(var(--y)) scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(calc(var(--x) * 1.5)) translateY(100vh) scale(0.8) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+    #payouts-image {
+    position: fixed;  /* Keeps it fixed on the screen even when scrolling */
+    left: 50px;       /* Distance from the left edge */
+    top: 80px;        /* Distance from the top */
+    max-width: 450px; /* Adjust the size */
+    height: auto;    /* On top of other elements */
+    }
+
+    #spinBtn, #autoSpinBtn {
+      width: 48%;
+      margin-top: 15px;
+      padding: 12px 0;
+      font-weight: bold;
+      font-size: 18px;
+      background: #49391c;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      user-select: none;
+    }
+    #spinBtn { background: #af4a4a; }
+    #autoSpinBtn { background: #424e81; }
+    #spinBtn:disabled, #autoSpinBtn:disabled { background: #202020; cursor: not-allowed; }
+    .panel { 
+      min-width: 200px; 
+      background: #3f3f3fe5; 
+      border-radius: 20px; 
+      padding: 30px; 
+      color: #eee; 
+      font-size: 14px;
+      width: fit-content; 
+    }
+    label, input, button { display: block; width: 100%; margin-bottom: 10px; }
+    input[type=number] { padding: 6px; font-size: 16px; border-radius: 4px; border: none; outline: none; }
+    button { background: #0a74da; color: white; border: none; border-radius: 6px; padding: 8px; cursor: pointer; font-weight: bold; }
+    button:disabled { background: #1f1b1b; cursor: not-allowed; }
+    .hidden { display: none; }
+    #result { margin-top: 15px; text-align: center; font-weight: bold; font-size: 18px; }
+    #result.win { color: #0f0; }
+    #betControls {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 200px;
+    }
+    #betControls button {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    #betDisplay {
+      min-width: 80px;
+      text-align: center;
+      color: #50c932;
+      user-select: none;
+    }
+    #titleDisplay {
+      text-align: center;
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 10px;
+      color: #ffcc00;
+      user-select: none;
+    }
+    
+    #musicToggleBtn {
+      background: #26272700;
+      position: fixed;
+      top: 300px;     /* distance from the top of the screen */
+      right: 400px;
+      border: none;
+      background: none;
+      font-size: 24px;   /* size of emoji */
+      line-height: 1;
+      cursor: pointer;
+      display: inline-flex; 
+      align-items: center;
+      justify-content: center;
+      width: 1em;      /* 1em width and height */
+      height: 1em;
+    }
+
+    #musicToggleBtn:hover {
+      background-color: #05050500;
+    }
+
+    #resetBtn {
+     padding: 0;
+     position: fixed;
+     top: 300px;     /* distance from the top of the screen */
+     right: 560px;
+     border: none;
+     background: none;
+     font-size: 24px;   /* size of emoji */
+     line-height: 1;
+     cursor: pointer;
+     display: inline-flex; 
+     align-items: center;
+     justify-content: center;
+     width: 1em;      /* 1em width and height */
+     height: 1em;
+}
+
+    #resetBtn:hover {
+      background-color: #05050500;
+    }
+
+    #HomeButton {
+     padding: 0;
+     position: fixed;
+     top: 380px;     /* distance from the top of the screen */
+     right: 480px;
+     border: none;
+     background: none;
+     font-size: 24px;   /* size of emoji */
+     line-height: 1;
+     cursor: pointer;
+     display: inline-flex; 
+     align-items: center;
+     justify-content: center;
+     width: 1em;      /* 1em width and height */
+     height: 1em;
+}
+
+    #HomeButton:hover {
+      background-color: #05050500;
+    }
+
+    #FXBtn {
+     padding: 0;
+     position: fixed;
+     top: 300px;     /* distance from the top of the screen */
+     right: 480px;
+     border: none;
+     background: none;
+     font-size: 24px;   /* size of emoji */
+     line-height: 1;
+     cursor: pointer;
+     display: inline-flex; 
+     align-items: center;
+     justify-content: center;
+     width: 1em;      /* 1em width and height */
+     height: 1em;
+}
+
+    #FXBtn:hover {
+      background-color: #05050500;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Cacanele Jmekerele</h1>
+
+<div id="moneyConfettiContainer"></div>
+
+<div class="container">
+  <div id="grid-wrapper">
+    <div id="grid">
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+      <div class="cell"><img src="images/cherry.png" alt="cherry" /></div>
+    </div>
+
+    <div style="display:flex; justify-content: space-between;">
+      <button id="spinBtn" onclick="spin()" disabled>Spin</button>
+      <button id="autoSpinBtn" onclick="toggleAutoSpin()" disabled>Auto</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div id="budgetSetup">
+      <label>🧨 Cand esti ready, da-i bataie:</label>
+      <label>Bugetul este 50.000 LEI, de fiecare data cand incepi jocul.</label>
+      <label>Jocul se termina odata ce pierzi toti banii</label>
+      <label>Poti reseta oricand apasand butonul de reset</label>
+      <label>Scorul nu ti se va salva daca resetezi si nu ai pierdut toti banii</label>
+      <input type="number" id="budgetInput" value="50000" min="50000" style="display:none;" />
+      <button onclick="setBudget()">Yes Yes Yes</button>
+    </div>
+
+    <div id="gameStats" class="hidden">
+  <div id="betControls">
+    <button id ="minusBet" onclick="changeBet(-1)">-</button>
+    <div id="betDisplay">Bet: $1</div>
+    <button id="plusBet" onclick="changeBet(1)">+</button>
+  </div>
+  <div>💼 Buget: <span id="budget">LEI 0</span></div>
+  <div>🏆 Scor: <span id="score">LEI 0</span></div>
+  <div id="titleDisplay"></div>
+  <button id="resetBtn" onclick="resetGame()">🔄</button>
+  <button id="FXBtn" onclick="toggleFX()">🔊</button>
+  <button id="musicToggleBtn" onclick="toggleMusic()">🎶</button>
+  <button id="HomeButton" onclick="location.href='chirpitek_engine.html'">🏠</button>
+</div>
+  </div>
+</div>
+<div id="result"></div>
+
+<img id="payouts-image" src="images/payouts.png" alt="Payouts" />
+
+<audio id="backgroundMusic" src="sounds/solo_compe.mp3" loop></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+<audio id="buttonFx" src="sounds/button.mp3"></audio>
+<audio id="debugsound" src="sounds/debug.mp3"></audio>
+
+<script>
+
+  const symbols = ['cherry', 'lemon', 'watermelon', 'bell', 'star', 'seven', 'bonus'];
+  const symbolToImage = {
+    'cherry': 'images/cherry.png',
+    'lemon': 'images/lemon.png',
+    'watermelon': 'images/watermelon.png',
+    'bell': 'images/bell.png',
+    'star': 'images/star.png',
+    'seven': 'images/seven.png',
+    'bonus': 'images/bonus.png',
+  };
+
+  const cells = document.querySelectorAll('.cell');
+  const result = document.getElementById('result');
+  const budgetDisplay = document.getElementById('budget');
+  const scoreDisplay = document.getElementById('score');
+  const titleDisplay = document.getElementById('titleDisplay');
+  const spinBtn = document.getElementById('spinBtn');
+  const autoSpinBtn = document.getElementById('autoSpinBtn');
+  const budgetSetup = document.getElementById('budgetSetup');
+  const gameStats = document.getElementById('gameStats');
+  const betDisplay = document.getElementById('betDisplay');
+  const backgroundMusic = document.getElementById('backgroundMusic');
+  const musicToggleBtn = document.getElementById('musicToggleBtn');
+  const winSound = document.getElementById('winSound');
+  const buttonFx = document.getElementById('buttonFx');
+  const debugsnd = document.getElementById('debugsound');
+
+  const minus_bet_button = document.getElementById('minusBet');
+  const plus_bet_button = document.getElementById('plusBet');
+
+
+  let budget = 0;
+  let score = 0;
+  let bet = 1;
+  let isSpinning = false;
+  let autoSpinActive = false;
+  let autoSpinTimeout;
+  let musicPlaying = false;
+  let soundFX = true;
+
+
+  const steps = [1, 5, 10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000];
+
+  function nextStep(current) {
+    if(isSpinning) return;
+
+    for (let s of steps) {
+      if (s > current) return s;
+    }
+    return current * 2;
+  }
+
+  function prevStep(current) {
+    if(isSpinning) return;
+  const maxStep = steps[steps.length - 1];
+  if (current > maxStep) {
+    // For big bets, just halve the bet (round down)
+    const half = Math.floor(current / 2);
+    return half >= 1 ? half : 1;
+  }
+  // For bets inside steps range, find previous smaller step
+  for (let i = steps.length - 1; i >= 0; i--) {
+    if (steps[i] < current) return steps[i];
+  }
+  return 1; // fallback to 1 if nothing found
+}
+
+  function formatNumberDot(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function setBudget() {
+    const val = parseInt(document.getElementById('budgetInput').value);
+    if (isNaN(val) || val < 1) {
+      showTemporaryMessage('Baga frate si tu un buget acolo. E gratis frate.');
+      return;
+    }
+    budget = val;
+    score = 0;
+    bet = 1;
+    budgetDisplay.textContent = formatNumberDot(budget);
+    scoreDisplay.textContent = formatNumberDot(score);
+    updateBetDisplay();
+    updateTitle();
+    budgetSetup.classList.add('hidden');
+    gameStats.classList.remove('hidden');
+    result.textContent = '';
+    clearGrid();
+    spinBtn.disabled = false;
+    autoSpinBtn.disabled = false;
+  }
+
+  function clearGrid() {
+    cells.forEach(c => {
+      c.innerHTML = '<img src="images/cherry.png" alt="cherry" />';
+      c.classList.remove('win-glow');
+    });
+  }
+
+  function updateBetDisplay() {
+    betDisplay.textContent = `Bet: ${formatNumberDot(bet)} LEI`;
+  }
+
+  function changeBet(direction) {
+    if (autoSpinActive) return; // no changes during auto spin
+    if (direction > 0) {
+      let newBet = nextStep(bet);
+      if (newBet > budget) {
+        newBet = budget;
+      }
+      bet = newBet;
+    } else {
+      let newBet = prevStep(bet);
+      bet = newBet;
+    }
+    if (bet < 1) bet = 1;
+    updateBetDisplay();
+  }
+
+  const payouts = {
+  'cherry_3': 2,
+  'lemon_3': 5,
+  'watermelon_3': 7,
+  'bell_3': 10,
+  'star_3': 15,
+  'seven_3': 30,
+  'bonus_3': 2,
+   };
+
+
+  function spin() {
+    if(soundFX) {
+      buttonFx.volume = 0.3;
+      buttonFx.play();
+    }
+    if (bet > budget) {
+      showTemporaryMessage('Sefule esti chiar saracie.');
+      return;
+    }
+
+    ///Deduct the money once the spin button is pressed
+    budget -= bet;
+    budgetDisplay.textContent = formatNumberDot(budget);
+
+
+    spinBtn.disabled = true;
+    autoSpinBtn.disabled = true;
+
+    if(spinBtn.disabled = true) {
+      minus_bet_button.disabled = true;
+      plus_bet_button.disabled = true;
+    }
+
+    cells.forEach(c => c.classList.remove('win-glow'));
+    result.textContent = '';
+
+    let spins = 15;
+    let interval = 70;
+    let spinCount = 0;
+    const spinInterval = setInterval(() => {
+      for (let i = 0; i < cells.length; i++) {
+        const sym = symbols[Math.floor(Math.random() * symbols.length)];
+        cells[i].innerHTML = `<img src="${symbolToImage[sym]}" alt="${sym}" />`;
+      }
+      spinCount++;
+      if (spinCount >= spins) {
+        clearInterval(spinInterval);
+        finalizeSpin(bet);
+        spinBtn.disabled = false;
+        autoSpinBtn.disabled = false;
+        minus_bet_button.disabled = false;
+        plus_bet_button.disabled = false;
+        if (autoSpinActive) scheduleNextAutoSpin();
+      }
+    }, interval);
+  }
+
+  function finalizeSpin(bet) {
+  let wonAmount = 0;
+  const gridSymbols = Array.from(cells).map(c => c.querySelector('img').alt);
+
+  // Helper to calculate payout for a line of 3 identical symbols
+  function payoutForLine(symbol) {
+    const key = symbol + '_3';
+    return payouts[key] ? bet * payouts[key] : 0;
+  }
+
+  // Rows
+  for (let row = 0; row < 3; row++) {
+    const rSymbols = gridSymbols.slice(row * 3, row * 3 + 3);
+    if (rSymbols.every(s => s === rSymbols[0])) {
+      wonAmount += payoutForLine(rSymbols[0]);
+      for (let i = 0; i < 3; i++) cells[row * 3 + i].classList.add('win-glow');
+
+      if (rSymbols[0] === 'bonus') {
+      debugsnd.play();
+      startBonusGame();
+    }
+    }
+  }
+
+  // Columns
+  for (let col = 0; col < 3; col++) {
+
+    const cSymbols = [gridSymbols[col], gridSymbols[col + 3], gridSymbols[col + 6]];
+    if (cSymbols.every(s => s === cSymbols[0])) {
+      wonAmount += payoutForLine(cSymbols[0]);
+      for (let i = 0; i < 3; i++) cells[col + i * 3].classList.add('win-glow');
+
+      if (cSymbols[0] === 'bonus') {
+      debugsnd.play();
+      startBonusGame();
+    }
+    }
+  }
+
+  // Diagonals
+  const diag1 = [gridSymbols[0], gridSymbols[4], gridSymbols[8]];
+  if (diag1.every(s => s === diag1[0])) {
+    wonAmount += payoutForLine(diag1[0]);
+    [0,4,8].forEach(i => cells[i].classList.add('win-glow'));
+
+    if (diag1[0] === 'bonus') {
+    debugsnd.play();
+    startBonusGame();
+  }
+  }
+
+  const diag2 = [gridSymbols[2], gridSymbols[4], gridSymbols[6]];
+  if (diag2.every(s => s === diag2[0])) {
+    wonAmount += payoutForLine(diag2[0]);
+    [2,4,6].forEach(i => cells[i].classList.add('win-glow'));
+
+    if (diag2[0] === 'bonus') {
+      debugsnd.play();
+      startBonusGame();
+  }
+  }
+
+    if (wonAmount > 0) {
+      if(soundFX) {
+        winSound.volume = 0.4;
+        winSound.play();
+      }
+      
+      score += wonAmount;
+      budget += wonAmount;
+      budgetDisplay.textContent = formatNumberDot(budget);
+    
+      result.textContent = `Binee maaa: ${formatNumberDot(wonAmount)}LEI! 🎉`;
+      launchMoneyConfettiPoof(50);
+      result.classList.add('win');
+    } else {
+      result.textContent = `Vai de capul tau: -${formatNumberDot(bet)}LEI.`;
+      result.classList.remove('win');
+    }
+
+    scoreDisplay.textContent = formatNumberDot(score);
+    updateTitle();
+
+    ///DACA BUGETUL E BAFTA
+    if (budget <= 0) {
+      
+      spinBtn.disabled = true;
+      autoSpinBtn.disabled = true;
+      autoSpinActive = false;
+
+      const playerScore = scoreDisplay.textContent = formatNumberDot(score);
+      const numericScore = Number(playerScore.replace(/\./g, ''));
+
+      if(numericScore == 0) return;
+      
+///Jmekerie pe felie sa aflam numele prostului      
+  NameSubmitScore();
+ // optional: clear the field   
+    }
+  }
+
+  function updateTitle() {
+    // Original title ranges and rules from user
+    // 0-1,000,000 : Chirpic
+    // 1,000,000 - 50,000,000 : Mucea
+    // 50,000,000 - 250,000,000 : Ciuri Buri
+    // 250,000,000 - 500,000,000 : Sifu la Bani
+    // 500,000,000 - 1,000,000,000 : Jmeker
+    // After every 1,000,000,000 add "Jm" before Jmeker
+    let s = budget;
+    let title = '';
+    if (s < 5000000) {
+      title = 'Chirpic';
+    } else if (s < 25000000) {
+      title = 'Mucea';
+    } else if (s < 250000000) {
+      title = 'Ciuri Buri';
+    } else if (s < 1000000000) {
+      title = 'Sifu la Bani';
+    } else if (s < 2000000000) {
+      titleDisplay.style.color = '#50c932';
+      title = 'Jmeker';
+    } else {
+      {
+    let count = Math.floor(s / 1000000000);
+
+    if (count >= 6) {
+      title = 
+      `Gata frt, 
+      tu esti sefu`;
+      titleDisplay.style.color = 'red';
+      titleDisplay.classList.add('glow-red');
+    } else {
+      title = 'Jm'.repeat(count) + 'eker';
+      titleDisplay.style.color = '#50c932';
+      titleDisplay.classList.add('glow-green');
+    }
+  }
+    }
+    titleDisplay.textContent = title;
+
+    // Set color based on title:
+const titleColors = {
+  'Chirpic': '#800000',
+  'Mucea': 'orange',
+  'Ciuri Buri': 'yellow',
+  'Sifu la Bani': 'cyan',
+};
+
+// Handle "Jm...eker" titles (with multiple Jm prefixes)
+if (title.startsWith('Jm') && title !== 'Jmeker') {
+  titleDisplay.style.color = '#50c932'; // Or any color you want for higher ranks
+} else {
+  titleDisplay.style.color = titleColors[title] || '#50c932'; // fallback color
+}
+
+  }
+
+  function toggleAutoSpin() {
+    if (autoSpinActive) {
+      autoSpinActive = false;
+      autoSpinBtn.textContent = 'Auto';
+      clearTimeout(autoSpinTimeout);
+      spinBtn.disabled = false;
+      minus_bet_button.disabled = false;
+      plus_bet_button.disabled = false;
+    } else {
+      if (bet > budget) {
+        showTemporaryMessage('Pe bune ma sefule?');
+        return;
+      }
+      autoSpinActive = true;
+      autoSpinBtn.textContent = 'STOP';
+      spinBtn.disabled = true;
+      scheduleNextAutoSpin();
+    }
+  }
+
+
+  ///Money launching effects funny hahahahahahahahhasdjashbdasdbasma omor
+  function launchMoneyConfettiPoof(count = 20) {
+  const container = document.getElementById('moneyConfettiContainer');
+
+  for (let i = 0; i < count; i++) {
+    const img = document.createElement('img');
+    img.src = 'images/leu.png'; // Your money image path
+    img.classList.add('moneyConfetti');
+
+    // Random burst directions
+    const angle = Math.random() * 2 * Math.PI;
+    const radius = Math.random() * 550 + 450; // distance to fly out
+
+    const x = Math.cos(angle) * radius + 'px';
+    const y = Math.sin(angle) * -radius + 'px'; // Negative = upward
+
+    img.style.setProperty('--x', x);
+    img.style.setProperty('--y', y);
+
+    // Random delay
+    img.style.animationDelay = `${Math.random() * 0.2}s`;
+
+    // Random size
+    const scale = 0.6 + Math.random() * 0.8;
+    img.style.width = `${scale * 40}px`;
+
+    container.appendChild(img);
+
+    // Remove after animation
+    setTimeout(() => img.remove(), 4000);
+  }
+}
+
+  function scheduleNextAutoSpin() {
+    if (!autoSpinActive) return;
+    autoSpinTimeout = setTimeout(() => {
+      if (budget < bet) {
+        showTemporaryMessage('S-a dus pe pl bugetul. Se opreste auto-spin.');
+        toggleAutoSpin();
+        return;
+      }
+      spin();
+    }, 1500);
+  }
+
+  function toggleMusic() {
+    if (musicPlaying) {
+      backgroundMusic.pause();
+      musicPlaying = false;
+      musicToggleBtn.textContent = '🔇';
+    } else {
+      backgroundMusic.play();
+      backgroundMusic.volume = 0.1;
+      musicPlaying = true;
+      musicToggleBtn.textContent = '🎶';
+    }
+  }
+
+  function toggleFX() {
+    if(soundFX) {
+      FXBtn.textContent = '🔈';
+      soundFX = false;
+    } else {
+      FXBtn.textContent = '🔊';
+      soundFX = true;
+    }
+  }
+
+
+/// Bonus Game function mortii ma-sii
+  function startBonusGame() {
+    const overlay = document.getElementById('bonusOverlay');
+    const prizeResult = document.getElementById('prizeResult');
+    const closeBtn = document.getElementById('closeBonus');
+    const giftBoxes = document.querySelectorAll('.giftBox');
+
+    overlay.style.display = 'flex';
+    prizeResult.textContent = '';
+    closeBtn.style.display = 'none';
+
+    spinBtn.disabled = true;
+    autoSpinBtn.disabled = true;
+
+    giftBoxes.forEach(box => {
+      box.disabled = false;
+      box.textContent = '🎁';
+      box.addEventListener('click', onGiftClick);
+    });
+
+    function onGiftClick(e) {
+      giftBoxes.forEach(b => b.disabled = true);
+
+      const prizeType = e.currentTarget.getAttribute('data-prize');
+      let prizeAmount = 0;
+
+      if (prizeType === 'big') prizeAmount = bet * 70;
+      else if (prizeType === 'small') prizeAmount = bet * 35;
+      else prizeAmount = 0;
+
+      e.currentTarget.textContent = prizeAmount > 0 ? `$${prizeAmount}` : '❌';
+
+      prizeResult.textContent = prizeAmount > 0 ? `Esti zeu! Ai castigat: ${prizeAmount.toLocaleString('de-DE')}LEI!` : `Pulica, mai incearca.`;
+
+      budget += prizeAmount;
+      score += prizeAmount;
+      budgetDisplay.textContent = formatNumberDot(budget);
+      scoreDisplay.textContent = formatNumberDot(score);
+
+      closeBtn.style.display = 'inline-block';
+
+      giftBoxes.forEach(box => box.removeEventListener('click', onGiftClick));
+    }
+
+    closeBtn.onclick = () => {
+      overlay.style.display = 'none';
+      spinBtn.disabled = false;
+      autoSpinBtn.disabled = false;
+      updateTitle();
+    };
+  }
+
+  ////Functie pentru fucking nume pe mizeria asta baga-mi-as pula-n ea
+  function NameSubmitScore() {
+    const submit_overlay = document.getElementById('submitModal');
+    const submit_button = document.getElementById('confirmSubmit');
+
+    submit_overlay.style.display = 'flex';
+    prizeResult.textContent = '';
+
+    spinBtn.disabled = true;
+    autoSpinBtn.disabled = true;
+
+    submit_button.onclick = () => {
+      submit_overlay.style.display = 'none';
+      submit_button.style.display = 'none';
+      const nameInput = document.getElementById('nameInput');
+      const nameInputID = nameInput.value.trim();
+      submitScore(nameInputID, score);  // <- replace playerScore with your actual score variable
+      nameInputID.value = '';
+      spinBtn.disabled = false;
+      autoSpinBtn.disabled = false;
+    };
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const resetBtn = document.getElementById('resetBtn');
+    const resetModal = document.getElementById('resetModal');
+    const confirmReset = document.getElementById('confirmReset');
+    const cancelReset = document.getElementById('cancelReset');
+
+    // Show the modal
+    resetBtn.addEventListener('click', () => {
+      resetModal.style.display = 'block';
+    });
+
+    // Reload the page if confirmed
+    confirmReset.addEventListener('click', () => {
+      location.reload();
+    });
+
+    // Hide the modal if canceled
+    cancelReset.addEventListener('click', () => {
+      resetModal.style.display = 'none';
+    });
+  });
+
+function showTemporaryMessage(message, duration = 5000) {
+  result.textContent = message;
+  result.classList.remove('win'); // remove win styling if present
+  // Clear the message after duration milliseconds
+  setTimeout(() => {
+    result.textContent = '';
+  }, duration);
+}
+  
+  window.addEventListener('load', () => {
+    // Try to auto-play when the page loads
+    backgroundMusic.volume = 0.1;
+    backgroundMusic.play().then(() => {
+      musicPlaying = true;
+      musicToggleBtn.textContent = '🎶';
+    }).catch((err) => {
+      // Autoplay might be blocked until user interacts
+      //console.warn('Autoplay blocked by browser. Waiting for user interaction.');
+      
+      const enableAudio = () => {
+        backgroundMusic.play();
+        backgroundMusic.volume = 0.1;
+        musicPlaying = true;
+        musicToggleBtn.textContent = '🎶';
+        window.removeEventListener('click', enableAudio);
+      };
+
+      window.addEventListener('click', enableAudio);
+    });
+  });
+</script>
+<script type="module" src="firebase.js"></script>
+
+<!-- Reset Modal -->
+<div id="resetModal" class="modal">
+  <div class="modal-content">
+    <p>🔰 Sigur vrei să resetezi? Și-așa nu câștigi.</p>
+    <button id="confirmReset">Da</button>
+    <button id="cancelReset">Nu</button>
+  </div>
+</div>
+
+<!-- Bonus overlay cica plm, sunt prost la coding-->
+<div id="bonusOverlay" style="display:none; position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+  <div id="bonusBox" style="background: rgb(90, 64, 49); padding: 20px; border-radius: 10px; text-align: center;">
+    <h2>Alege sefule!</h2>
+    <div id="giftBoxes" style="display: flex; gap: 20px; justify-content: center;">
+<button class="giftBox" data-prize="big" style="background-color: gold; color: black;">🎁</button>
+<button class="giftBox" data-prize="small" style="background-color: gold; color: black;">🎁</button>
+<button class="giftBox" data-prize="empty" style="background-color: gold; color: black;">🎁</button>
+    </div>
+    <div id="prizeResult" style="margin-top: 20px; font-size: 1.2em;"></div>
+    <button id="closeBonus" style="display:none; margin-top: 20px;">Close</button>
+  </div>
+</div>
+
+<!-- Submit Modal -->
+<div id="submitModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <p>🔰 Adauga numele chirpicos aici. Nu se va salva scorul daca acest nume este deja existent.</p>
+    <input type="text" id="nameInput"/>
+    <button id="confirmSubmit">Да конечно</button>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>
