@@ -5,7 +5,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pacanele Jmekerele Cac Pe Ele</title>
+  <title>🎰Pacanele Compe</title>
   <style>
   body {
     font-family: 'Orbitron', sans-serif;
@@ -132,15 +132,6 @@
     opacity: 0;
   }
 }
-
-    #payouts-image {
-    position: fixed;  /* Keeps it fixed on the screen even when scrolling */
-    left: 50px;       /* Distance from the left edge */
-    top: 80px;        /* Distance from the top */
-    max-width: 450px; /* Adjust the size */
-    height: auto;    /* On top of other elements */
-    }
-
     #spinBtn, #autoSpinBtn {
       width: 48%;
       margin-top: 15px;
@@ -203,9 +194,9 @@
     
     #musicToggleBtn {
       background: #26272700;
-      position: fixed;
-      top: 300px;     /* distance from the top of the screen */
-      right: 400px;
+      position: relative;
+      top: 3.5em;     /* distance from the top of the screen */
+      right: -30%;
       border: none;
       background: none;
       font-size: 24px;   /* size of emoji */
@@ -224,9 +215,9 @@
 
     #resetBtn {
      padding: 0;
-     position: fixed;
-     top: 300px;     /* distance from the top of the screen */
-     right: 560px;
+     position: relative;
+     top: 3.5em;     /* distance from the top of the screen */
+     right: 5%;
      border: none;
      background: none;
      font-size: 24px;   /* size of emoji */
@@ -245,9 +236,9 @@
 
     #HomeButton {
      padding: 0;
-     position: fixed;
-     top: 380px;     /* distance from the top of the screen */
-     right: 480px;
+     position: relative;
+     top: 3.4em;     /* distance from the top of the screen */
+     right: -50%;
      border: none;
      background: none;
      font-size: 24px;   /* size of emoji */
@@ -266,9 +257,9 @@
 
     #FXBtn {
      padding: 0;
-     position: fixed;
-     top: 300px;     /* distance from the top of the screen */
-     right: 480px;
+     position: relative;
+     top: 3.5em;     /* distance from the top of the screen */
+     right: -13%;
      border: none;
      background: none;
      font-size: 24px;   /* size of emoji */
@@ -341,9 +332,6 @@
   </div>
 </div>
 <div id="result"></div>
-
-<img id="payouts-image" src="images/payouts.png" alt="Payouts" />
-
 <audio id="backgroundMusic" src="sounds/solo_compe.mp3" loop></audio>
 <audio id="winSound" src="sounds/win.mp3"></audio>
 <audio id="buttonFx" src="sounds/button.mp3"></audio>
@@ -477,7 +465,7 @@
   'bell_3': 10,
   'star_3': 15,
   'seven_3': 30,
-  'bonus_3': 2,
+  'bonus_3': 4,
    };
 
 
@@ -803,7 +791,8 @@ if (title.startsWith('Jm') && title !== 'Jmeker') {
       let prizeAmount = 0;
 
       if (prizeType === 'big') prizeAmount = bet * 70;
-      else if (prizeType === 'small') prizeAmount = bet * 35;
+      else if (prizeType === 'medium') prizeAmount = bet * 30
+      else if (prizeType === 'small') prizeAmount = bet * 5;
       else prizeAmount = 0;
 
       e.currentTarget.textContent = prizeAmount > 0 ? `$${prizeAmount}` : '❌';
@@ -920,9 +909,11 @@ function showTemporaryMessage(message, duration = 5000) {
   <div id="bonusBox" style="background: rgb(90, 64, 49); padding: 20px; border-radius: 10px; text-align: center;">
     <h2>Alege sefule!</h2>
     <div id="giftBoxes" style="display: flex; gap: 20px; justify-content: center;">
-<button class="giftBox" data-prize="big" style="background-color: gold; color: black;">🎁</button>
-<button class="giftBox" data-prize="small" style="background-color: gold; color: black;">🎁</button>
-<button class="giftBox" data-prize="empty" style="background-color: gold; color: black;">🎁</button>
+      <button class="giftBox" data-prize="big" style="background-color: gold; color: black;">🎁</button>
+      <button class="giftBox" data-prize="small" style="background-color: gold; color: black;">🎁</button>
+      <button class="giftBox" data-prize="medium" style="background-color: gold; color: black;">🎁</button>
+      <button class="giftBox" data-prize="empty" style="background-color: gold; color: black;">🎁</button>
+      <button class="giftBox" data-prize="empty" style="background-color: gold; color: black;">🎁</button>
     </div>
     <div id="prizeResult" style="margin-top: 20px; font-size: 1.2em;"></div>
     <button id="closeBonus" style="display:none; margin-top: 20px;">Close</button>
