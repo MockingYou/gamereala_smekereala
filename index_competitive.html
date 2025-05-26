@@ -307,11 +307,12 @@
   <div class="panel">
     <div id="budgetSetup">
       <label>🧨 Cand esti ready, da-i bataie:</label>
-      <label>Bugetul este 50.000 LEI, de fiecare data cand incepi jocul.</label>
+      <label>Bugetul este 50 LEI, de fiecare data cand incepi jocul.</label>
+      <label>Incearca sa castigi cat mai mult, alege bet-ul cu cap.</label>
       <label>Jocul se termina odata ce pierzi toti banii</label>
       <label>Poti reseta oricand apasand butonul de reset</label>
       <label>Scorul nu ti se va salva daca resetezi si nu ai pierdut toti banii</label>
-      <input type="number" id="budgetInput" value="50000" min="50000" style="display:none;" />
+      <input type="number" id="budgetInput" value="50" min="50" style="display:none;" />
       <button onclick="setBudget()">Yes Yes Yes</button>
     </div>
 
@@ -321,8 +322,8 @@
     <div id="betDisplay">Bet: $1</div>
     <button id="plusBet" onclick="changeBet(1)">+</button>
   </div>
-  <div>💼 Buget: <span id="budget">LEI 0</span></div>
-  <div>🏆 Scor: <span id="score">LEI 0</span></div>
+  <div>💼 Buget: <span id="budget"> 0</span></div>
+  <div>🏆 Scor: <span id="score"> 0</span></div>
   <div id="titleDisplay"></div>
   <button id="resetBtn" onclick="resetGame()">🔄</button>
   <button id="FXBtn" onclick="toggleFX()">🔊</button>
@@ -617,61 +618,62 @@
     }
   }
 
-  function updateTitle() {
-    // Original title ranges and rules from user
-    // 0-1,000,000 : Chirpic
-    // 1,000,000 - 50,000,000 : Mucea
-    // 50,000,000 - 250,000,000 : Ciuri Buri
-    // 250,000,000 - 500,000,000 : Sifu la Bani
-    // 500,000,000 - 1,000,000,000 : Jmeker
-    // After every 1,000,000,000 add "Jm" before Jmeker
-    let s = budget;
+////Functie pentru titluri update plm
+function updateTitle() {
+    const s = budget;
     let title = '';
-    if (s < 5000000) {
-      title = 'Chirpic';
-    } else if (s < 25000000) {
-      title = 'Mucea';
-    } else if (s < 250000000) {
-      title = 'Ciuri Buri';
-    } else if (s < 1000000000) {
-      title = 'Sifu la Bani';
-    } else if (s < 2000000000) {
-      titleDisplay.style.color = '#50c932';
-      title = 'Jmeker';
-    } else {
-      {
-    let count = Math.floor(s / 1000000000);
+    let color = '#50c932'; // default color
+    let glowClass = '';
+  
+    // Define all your tiers, including big numbers, with fixed titles:
+    const tiers = [
+  { min: 0, title: 'Chirpic', color: '#C49E6C' },                // Dark Brown
+  { min: 2_000_000, title: 'Mucea', color: 'yellow' },          // BYellow la gura
+  { min: 5_000_000, title: 'Ciuri Buri', color: 'yellow' },     // yellow la gura
+  { min: 25_000_000, title: 'Boss', color: '#6B8E23' },          // Olive Green
+  { min: 500_000_000, title: 'Boss de boss', color: '#6B8E23' }, // Olive Green (same)
+  { min: 250_000_000_000, title: 'Sifu la Bani', color: '#008080' }, // Teal
 
-    if (count >= 6) {
-      title = 
-      `Gata frt, 
-      tu esti sefu`;
-      titleDisplay.style.color = 'red';
-      titleDisplay.classList.add('glow-red');
-    } else {
-      title = 'Jm'.repeat(count) + 'eker';
-      titleDisplay.style.color = '#50c932';
-      titleDisplay.classList.add('glow-green');
+  { min: 2_000_000_000_000_000, title: 'Jmeker', color: '#4169E1', glowClass: 'glow-green' }, // Royal Blue
+  { min: 3_000_000_000_000_000, title: 'JmJmeker', color: '#4169E1', glowClass: 'glow-green' }, // Royal Blue
+  { min: 4_000_000_000_000_000, title: 'JmJmJmeker', color: '#800080', glowClass: 'glow-green' }, // Purple
+  { min: 5_000_000_000_000_000, title: 'JmJmJmeker', color: '#800080', glowClass: 'glow-green' }, // Purple
+  { min: 6_000_000_000_000_000, title: 'JmJmJmJmeker', color: '#DC143C', glowClass: 'glow-green' }, // Crimson Red but green glow
+  { min: 7_000_000_000_000_000, title: 'JmJmJmJmJmeker', color: '#DC143C', glowClass: 'glow-green' }, // Crimson Red but green glow
+
+  // Above this, switch to red glow
+  { min: 8_000_000_000_000_000, title: 'Foarte Jmeker', color: '#DC143C', glowClass: 'glow-red' },
+  { min: 9_000_000_000_000_000, title: 'Cel mai Jmeker', color: '#DC143C', glowClass: 'glow-red' },
+  { min: 10_000_000_000_000_000, title: 'Ultra Jmeker', color: '#FFD700', glowClass: 'glow-red' }, // Gold + glow
+  { min: 250_000_000_000_000_000, title: 'Gata frt, tu esti', color: '#FFD700', glowClass: 'glow-red' }, // Gold + glow
+  { min: 500_000_000_000_000_000, title: 'Potoleste-te frt', color: '#FF4500', glowClass: 'glow-red' }, // Fiery Orange + glow
+  { min: 1_000_000_000_000_000_000, title: 'Mai ia si tu o pauza', color: '#FF4500', glowClass: 'glow-red' }, // Fiery Orange + glow
+  { min: 1_500_000_000_000_000_000, title: 'Transpirici', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 2_000_000_000_000_000_000, title: 'Animal prost', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 3_000_000_000_000_000_000, title: 'Coaie gata, tu esti', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 4_000_000_000_000_000_000, title: 'Doamne fereste', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 5_000_000_000_000_000_000, title: 'Mai ia si tu o pauza', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 10_000_000_000_000_000_000, title: 'Seek help', color: '#FF4500', glowClass: 'glow-red' },
+];
+
+  
+    // Find highest tier user fits in
+    for (let i = tiers.length - 1; i >= 0; i--) {
+      if (s >= tiers[i].min) {
+        title = tiers[i].title;
+        color = tiers[i].color;
+        glowClass = tiers[i].glowClass || '';
+        break;
+      }
     }
-  }
-    }
+  
+    // Apply text and styles
     titleDisplay.textContent = title;
-
-    // Set color based on title:
-const titleColors = {
-  'Chirpic': '#800000',
-  'Mucea': 'orange',
-  'Ciuri Buri': 'yellow',
-  'Sifu la Bani': 'cyan',
-};
-
-// Handle "Jm...eker" titles (with multiple Jm prefixes)
-if (title.startsWith('Jm') && title !== 'Jmeker') {
-  titleDisplay.style.color = '#50c932'; // Or any color you want for higher ranks
-} else {
-  titleDisplay.style.color = titleColors[title] || '#50c932'; // fallback color
-}
-
+    titleDisplay.style.color = color;
+  
+    // Clear previous glow classes before adding new
+    titleDisplay.classList.remove('glow-red', 'glow-green');
+    if (glowClass) titleDisplay.classList.add(glowClass);
   }
 
   function toggleAutoSpin() {
@@ -765,80 +767,140 @@ if (title.startsWith('Jm') && title !== 'Jmeker') {
 
 
 /// Bonus Game function mortii ma-sii
-  function startBonusGame() {
-    const overlay = document.getElementById('bonusOverlay');
-    const prizeResult = document.getElementById('prizeResult');
-    const closeBtn = document.getElementById('closeBonus');
+function startBonusGame() {
+  const overlay = document.getElementById('bonusOverlay');
+  const prizeResult = document.getElementById('prizeResult');
+  const closeBtn = document.getElementById('closeBonus');
+  const giftBoxesContainer = document.getElementById('giftBoxes');
+
+  // Clear any previous boxes
+  giftBoxesContainer.innerHTML = '';
+
+  overlay.style.display = 'flex';
+  prizeResult.textContent = '';
+  closeBtn.style.display = 'none';
+
+  spinBtn.disabled = true;
+  autoSpinBtn.disabled = true;
+
+  // Shuffle the prizes
+  const prizes = ['big', 'medium', 'small', 'empty', 'empty'];
+  for (let i = prizes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [prizes[i], prizes[j]] = [prizes[j], prizes[i]];
+  }
+
+  // Generate buttons dynamically
+  prizes.forEach(prizeType => {
+    const box = document.createElement('button');
+    box.className = 'giftBox';
+    box.setAttribute('data-prize', prizeType);
+    box.textContent = '🎁';
+    box.style.backgroundColor = 'gold';
+    box.style.color = 'black';
+    box.style.fontSize = '18px';
+    box.style.padding = '8px 12px';
+    box.style.borderRadius = '8px';
+    box.style.cursor = 'pointer';
+
+    box.addEventListener('click', onGiftClick);
+    giftBoxesContainer.appendChild(box);
+  });
+
+  function onGiftClick(e) {
+    const clickedBox = e.currentTarget;
     const giftBoxes = document.querySelectorAll('.giftBox');
+    giftBoxes.forEach(b => b.disabled = true);
 
-    overlay.style.display = 'flex';
-    prizeResult.textContent = '';
-    closeBtn.style.display = 'none';
+    const prizeType = clickedBox.getAttribute('data-prize');
+    let prizeAmount = 0;
 
-    spinBtn.disabled = true;
-    autoSpinBtn.disabled = true;
+    if (prizeType === 'big') prizeAmount = bet * 70;
+    else if (prizeType === 'medium') prizeAmount = bet * 30;
+    else if (prizeType === 'small') prizeAmount = bet * 5;
+    else prizeAmount = 0;
 
+    // Show prize type text on picked gift
+    if (prizeType === 'big') clickedBox.textContent = '70x 😫';
+    else if (prizeType === 'medium') clickedBox.textContent = '30x 😃';
+    else if (prizeType === 'small') clickedBox.textContent = '5x 😢';
+    else clickedBox.textContent = '❌';
+
+    clickedBox.style.border = '3px solid lime';
+    clickedBox.style.backgroundColor = '#d4af37'; // gold for winner
+
+    // Reveal all other boxes with type text
     giftBoxes.forEach(box => {
-      box.disabled = false;
-      box.textContent = '🎁';
-      box.addEventListener('click', onGiftClick);
+      if (box !== clickedBox) {
+        const type = box.getAttribute('data-prize');
+        let revealText = '❌';
+        if (type === 'big') revealText = '70x 😫';
+        else if (type === 'medium') revealText = '30x 😃';
+        else if (type === 'small') revealText = '5x 😢';
+
+        box.textContent = revealText;
+        box.style.backgroundColor = '#c0392b'; // red
+        box.style.opacity = '0.6';
+      }
     });
 
-    function onGiftClick(e) {
-      giftBoxes.forEach(b => b.disabled = true);
+    // Update result and stats
+    prizeResult.textContent = prizeAmount > 0
+      ? `Esti zeu! Ai castigat: ${prizeAmount.toLocaleString('de-DE')} LEI!`
+      : `Pulica, mai incearca.`;
 
-      const prizeType = e.currentTarget.getAttribute('data-prize');
-      let prizeAmount = 0;
+    budget += prizeAmount;
+    score += prizeAmount;
+    budgetDisplay.textContent = formatNumberDot(budget);
+    scoreDisplay.textContent = formatNumberDot(score);
 
-      if (prizeType === 'big') prizeAmount = bet * 70;
-      else if (prizeType === 'medium') prizeAmount = bet * 30
-      else if (prizeType === 'small') prizeAmount = bet * 5;
-      else prizeAmount = 0;
-
-      e.currentTarget.textContent = prizeAmount > 0 ? `$${prizeAmount}` : '❌';
-
-      prizeResult.textContent = prizeAmount > 0 ? `Esti zeu! Ai castigat: ${prizeAmount.toLocaleString('de-DE')}LEI!` : `Pulica, mai incearca.`;
-
-      budget += prizeAmount;
-      score += prizeAmount;
-      budgetDisplay.textContent = formatNumberDot(budget);
-      scoreDisplay.textContent = formatNumberDot(score);
-
-      closeBtn.style.display = 'inline-block';
-
-      giftBoxes.forEach(box => box.removeEventListener('click', onGiftClick));
-    }
-
-    closeBtn.onclick = () => {
-      overlay.style.display = 'none';
-      spinBtn.disabled = false;
-      autoSpinBtn.disabled = false;
-      updateTitle();
-    };
+    closeBtn.style.display = 'inline-block';
+    giftBoxes.forEach(box => box.removeEventListener('click', onGiftClick));
   }
+
+  closeBtn.onclick = () => {
+    overlay.style.display = 'none';
+    spinBtn.disabled = false;
+    autoSpinBtn.disabled = false;
+    updateTitle();
+  };
+}
 
   ////Functie pentru fucking nume pe mizeria asta baga-mi-as pula-n ea
   function NameSubmitScore() {
-    const submit_overlay = document.getElementById('submitModal');
-    const submit_button = document.getElementById('confirmSubmit');
+  const submit_overlay = document.getElementById('submitModal');
+  const submit_button = document.getElementById('confirmSubmit');
+  const nameInput = document.getElementById('nameInput');
 
-    submit_overlay.style.display = 'flex';
-    prizeResult.textContent = '';
+  submit_overlay.style.display = 'flex';
+  prizeResult.textContent = '';
 
-    spinBtn.disabled = true;
-    autoSpinBtn.disabled = true;
+  spinBtn.disabled = true;
+  autoSpinBtn.disabled = true;
 
-    submit_button.onclick = () => {
-      submit_overlay.style.display = 'none';
-      submit_button.style.display = 'none';
-      const nameInput = document.getElementById('nameInput');
-      const nameInputID = nameInput.value.trim();
-      submitScore(nameInputID, score);  // <- replace playerScore with your actual score variable
-      nameInputID.value = '';
-      spinBtn.disabled = false;
-      autoSpinBtn.disabled = false;
-    };
+  submit_button.onclick = async () => {
+    const nameInputID = nameInput.value.trim();
+
+    if (!nameInputID) {
+      nameError.textContent = 'Balegosule, baga un nume daca vrei submit la scor.';
+      return;
+    }
+
+    if (nameInputID.length > 12) {
+    nameError.textContent = 'Ai voie maxim 12 caractere.';
+    return;
   }
+
+    await submitScore(nameInputID, score);
+
+    nameInput.value = '';
+    submit_overlay.style.display = 'none';
+    submit_button.style.display = 'none';
+    spinBtn.disabled = false;
+    autoSpinBtn.disabled = false;
+  };
+}
+
   
   document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('resetBtn');
@@ -909,11 +971,7 @@ function showTemporaryMessage(message, duration = 5000) {
   <div id="bonusBox" style="background: rgb(90, 64, 49); padding: 20px; border-radius: 10px; text-align: center;">
     <h2>Alege sefule!</h2>
     <div id="giftBoxes" style="display: flex; gap: 20px; justify-content: center;">
-      <button class="giftBox" data-prize="big" style="background-color: gold; color: black;">🎁</button>
-      <button class="giftBox" data-prize="small" style="background-color: gold; color: black;">🎁</button>
-      <button class="giftBox" data-prize="medium" style="background-color: gold; color: black;">🎁</button>
-      <button class="giftBox" data-prize="empty" style="background-color: gold; color: black;">🎁</button>
-      <button class="giftBox" data-prize="empty" style="background-color: gold; color: black;">🎁</button>
+      <!-- Buttons will be injected by JS -->
     </div>
     <div id="prizeResult" style="margin-top: 20px; font-size: 1.2em;"></div>
     <button id="closeBonus" style="display:none; margin-top: 20px;">Close</button>
@@ -925,6 +983,7 @@ function showTemporaryMessage(message, duration = 5000) {
   <div class="modal-content">
     <p>🔰 Adauga numele chirpicos aici. Nu se va salva scorul daca acest nume este deja existent.</p>
     <input type="text" id="nameInput"/>
+    <p id="nameError" style="color: red; font-weight: bold; margin-top: 8px;"></p>
     <button id="confirmSubmit">Да конечно</button>
   </div>
 </div>

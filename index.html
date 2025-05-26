@@ -209,6 +209,7 @@
   leaderboardList.innerHTML = '';
   const medals = ['🏆', '🥈', '🥉'];
   let rank = 1;
+
   snapshot.forEach(doc => {
     const { name, score, timestamp } = doc.data();
     const medal = rank <= 3 ? medals[rank - 1] + ' ' : '';
