@@ -697,35 +697,39 @@ function updateTitle() {
   }
 
 
-  ///Money launching effects funny hahahahahahahahhasdjashbdasdbasma omor
-  function launchMoneyConfettiPoof(count = 20) {
+ ///Money launching effects funny hahahahahahahahhasdjashbdasdbasma omor
+ function launchMoneyConfettiPoof(count = 20) {
   const container = document.getElementById('moneyConfettiContainer');
+  const images = [
+    'images/leu.png',
+    'images/leu_1.png',
+    'images/leu_2.png',
+    'images/leu_3.png',
+    'images/leu_4.png',
+    'images/leu_5.png'
+  ];
 
   for (let i = 0; i < count; i++) {
     const img = document.createElement('img');
-    img.src = 'images/leu.png'; // Your money image path
+    // Pick a random image from the array
+    img.src = images[Math.floor(Math.random() * images.length)];
     img.classList.add('moneyConfetti');
 
-    // Random burst directions
     const angle = Math.random() * 2 * Math.PI;
-    const radius = Math.random() * 550 + 450; // distance to fly out
+    const radius = Math.random() * 550 + 450; 
 
     const x = Math.cos(angle) * radius + 'px';
-    const y = Math.sin(angle) * -radius + 'px'; // Negative = upward
+    const y = Math.sin(angle) * -radius + 'px';
 
     img.style.setProperty('--x', x);
     img.style.setProperty('--y', y);
-
-    // Random delay
     img.style.animationDelay = `${Math.random() * 0.2}s`;
 
-    // Random size
     const scale = 0.6 + Math.random() * 0.8;
     img.style.width = `${scale * 40}px`;
 
     container.appendChild(img);
 
-    // Remove after animation
     setTimeout(() => img.remove(), 4000);
   }
 }
