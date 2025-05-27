@@ -1,0 +1,85 @@
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: url('images/menu_select.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #eee;
+      margin: 20px;
+      display: flex;
+      overflow: hidden;
+      /* prevent scrollbars */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      overflow: auto;
+    }
+
+    h1 {
+      margin-bottom: 40px;
+    }
+
+    button {
+      padding: 15px 30px;
+      margin: 10px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #1e88e5;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    /* Modal background */
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Modal content box */
+    .modal-content {
+      background-color: #222;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 400px;
+      text-align: center;
+      color: #eee;
+      font-size: 1.1rem;
+    }
+
+    .modal-content button {
+      margin-top: 20px;
+      background-color: #4caf50;
+    }
+
+    .modal-content button:hover {
+      background-color: #388e3c;
+    }
+
+    #payouts-image {
+      position: fixed;
+      /* Keeps it fixed on the screen even when scrolling */
+      left: 50px;
+      /* Distance from the left edge */
+      top: 80px;
+      /* Distance from the top */
+      max-width: 450px;
+      /* Adjust the size */
+      height: auto;
+      /* On top of other elements */
+    }
