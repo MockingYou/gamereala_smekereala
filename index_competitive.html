@@ -627,31 +627,35 @@ function updateTitle() {
   
     // Define all your tiers, including big numbers, with fixed titles:
     const tiers = [
-  { min: 0, title: 'Chirpic', color: '#C49E6C' },                // Dark Brown
-  { min: 2_000_000, title: 'Mucea', color: 'yellow' },          // BYellow la gura
-  { min: 5_000_000, title: 'Ciuri Buri', color: 'yellow' },     // yellow la gura
+  { min: 0, title: 'Saracie', color: '#C49E6C' },                // Dark Brown
+  { min: 50_000, title: 'Chirpic', color: '#C49E6C' },
+  { min: 250_000, title: 'Mucea', color: '#C49E6C' },
+  { min: 500_000, title: 'Mucea Lucea', color: 'yellow' },          // BYellow la gura
+  { min: 1_000_000, title: 'Ciuri Buri', color: 'yellow' },
+  { min: 5_000_000, title: 'Seful Chirpic', color: 'yellow' },     // yellow la gura
   { min: 25_000_000, title: 'Boss', color: '#6B8E23' },          // Olive Green
-  { min: 500_000_000, title: 'Boss de boss', color: '#6B8E23' }, // Olive Green (same)
+  { min: 50_000_000, title: 'Boss de boss', color: '#6B8E23' }, // Olive Green (same)
+  { min: 500_000_000, title: 'Bine rege', color: '#6B8E23' },
   { min: 250_000_000_000, title: 'Sifu la Bani', color: '#008080' }, // Teal
 
-  { min: 2_000_000_000_000_000, title: 'Jmeker', color: '#4169E1', glowClass: 'glow-green' }, // Royal Blue
-  { min: 3_000_000_000_000_000, title: 'JmJmeker', color: '#4169E1', glowClass: 'glow-green' }, // Royal Blue
+  { min: 1_000_000_000_000_000, title: 'Jmeker', color: '#4169E1', glowClass: 'glow-green' }, // Royal Blue
+  { min: 2_000_000_000_000_000, title: 'JmJmeker', color: '#4169E1', glowClass: 'glow-green' }, // Royal Blue
+  { min: 3_000_000_000_000_000, title: 'JmJmJmeker', color: '#800080', glowClass: 'glow-green' }, // Purple
   { min: 4_000_000_000_000_000, title: 'JmJmJmeker', color: '#800080', glowClass: 'glow-green' }, // Purple
-  { min: 5_000_000_000_000_000, title: 'JmJmJmeker', color: '#800080', glowClass: 'glow-green' }, // Purple
-  { min: 6_000_000_000_000_000, title: 'JmJmJmJmeker', color: '#DC143C', glowClass: 'glow-green' }, // Crimson Red but green glow
-  { min: 7_000_000_000_000_000, title: 'JmJmJmJmJmeker', color: '#DC143C', glowClass: 'glow-green' }, // Crimson Red but green glow
+  { min: 5_000_000_000_000_000, title: 'JmJmJmJmeker', color: '#DC143C', glowClass: 'glow-green' }, // Crimson Red but green glow
+  { min: 6_000_000_000_000_000, title: 'JmJmJmJmJmeker', color: '#DC143C', glowClass: 'glow-green' }, // Crimson Red but green glow
 
   // Above this, switch to red glow
-  { min: 8_000_000_000_000_000, title: 'Foarte Jmeker', color: '#DC143C', glowClass: 'glow-red' },
-  { min: 9_000_000_000_000_000, title: 'Cel mai Jmeker', color: '#DC143C', glowClass: 'glow-red' },
-  { min: 10_000_000_000_000_000, title: 'Ultra Jmeker', color: '#FFD700', glowClass: 'glow-red' }, // Gold + glow
-  { min: 250_000_000_000_000_000, title: 'Gata frt, tu esti', color: '#FFD700', glowClass: 'glow-red' }, // Gold + glow
-  { min: 500_000_000_000_000_000, title: 'Potoleste-te frt', color: '#FF4500', glowClass: 'glow-red' }, // Fiery Orange + glow
-  { min: 1_000_000_000_000_000_000, title: 'Mai ia si tu o pauza', color: '#FF4500', glowClass: 'glow-red' }, // Fiery Orange + glow
-  { min: 1_500_000_000_000_000_000, title: 'Transpirici', color: '#FF4500', glowClass: 'glow-red' },
-  { min: 2_000_000_000_000_000_000, title: 'Animal prost', color: '#FF4500', glowClass: 'glow-red' },
-  { min: 3_000_000_000_000_000_000, title: 'Coaie gata, tu esti', color: '#FF4500', glowClass: 'glow-red' },
-  { min: 4_000_000_000_000_000_000, title: 'Doamne fereste', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 7_000_000_000_000_000, title: 'Foarte Jmeker', color: '#DC143C', glowClass: 'glow-red' },
+  { min: 8_000_000_000_000_000, title: 'Cel mai Jmeker', color: '#DC143C', glowClass: 'glow-red' },
+  { min: 9_000_000_000_000_000, title: 'Ultra Jmeker', color: '#FFD700', glowClass: 'glow-red' }, // Gold + glow
+  { min: 10_000_000_000_000_000, title: 'Gata frt, tu esti', color: '#FFD700', glowClass: 'glow-red' }, // Gold + glow
+  { min: 50_000_000_000_000_000, title: 'Potoleste-te frt', color: '#FF4500', glowClass: 'glow-red' }, // Fiery Orange + glow
+  { min: 100_000_000_000_000_000, title: 'Mai ia si tu o pauza', color: '#FF4500', glowClass: 'glow-red' }, // Fiery Orange + glow
+  { min: 250_000_000_000_000_000, title: 'Transpirici', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 500_000_000_000_000_000, title: 'Animal prost', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 1_000_000_000_000_000_000, title: 'Coaie gata, tu esti', color: '#FF4500', glowClass: 'glow-red' },
+  { min: 2_500_000_000_000_000_000, title: 'Doamne fereste', color: '#FF4500', glowClass: 'glow-red' },
   { min: 5_000_000_000_000_000_000, title: 'Mai ia si tu o pauza', color: '#FF4500', glowClass: 'glow-red' },
   { min: 10_000_000_000_000_000_000, title: 'Seek help', color: '#FF4500', glowClass: 'glow-red' },
 ];
